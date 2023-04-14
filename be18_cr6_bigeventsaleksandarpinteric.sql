@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2023 at 08:00 PM
+-- Generation Time: Apr 14, 2023 at 08:32 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `be18_cr6_bigeventsaleksandarpinteric`
 --
+CREATE DATABASE IF NOT EXISTS `be18_cr6_bigeventsaleksandarpinteric` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `be18_cr6_bigeventsaleksandarpinteric`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `doctrine_migration_versions`
+--
+
+CREATE TABLE `doctrine_migration_versions` (
+  `version` varchar(191) NOT NULL,
+  `executed_at` datetime DEFAULT NULL,
+  `execution_time` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `doctrine_migration_versions`
+--
+
+INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
+('DoctrineMigrations\\Version20230414103517', '2023-04-14 12:35:35', 26);
 
 -- --------------------------------------------------------
 
@@ -27,7 +48,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `events`
 --
 
-DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
@@ -60,15 +80,46 @@ INSERT INTO `events` (`id`, `name`, `time`, `description`, `image`, `capacity`, 
 (9, 'Science Fair', '2023-09-01 09:00:00', 'Discover the wonders of science with interactive exhibits and demonstrations!', 'https://cdn.pixabay.com/photo/2011/12/13/14/31/earth-11015__340.jpg', 500, 'info@example.com', '+1 123 456 7890', '123 Main St', '12345', 'Anytown', 'https://example.com/science', 'community'),
 (10, 'Dance Performance', '2023-08-15 19:30:00', 'Experience the energy and excitement of our latest dance performance!', 'https://cdn.pixabay.com/photo/2016/10/20/08/36/woman-1754895__340.jpg', 150, 'tickets@example.com', '+1 555 555 5555', '456 Oak Ave', '54321', 'Cityville', 'https://example.com/dance', 'art');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messenger_messages`
+--
+
+CREATE TABLE `messenger_messages` (
+  `id` bigint(20) NOT NULL,
+  `body` longtext NOT NULL,
+  `headers` longtext NOT NULL,
+  `queue_name` varchar(190) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `available_at` datetime NOT NULL,
+  `delivered_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `doctrine_migration_versions`
+--
+ALTER TABLE `doctrine_migration_versions`
+  ADD PRIMARY KEY (`version`);
 
 --
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_75EA56E0FB7336F0` (`queue_name`),
+  ADD KEY `IDX_75EA56E0E3BD61CE` (`available_at`),
+  ADD KEY `IDX_75EA56E016BA31DB` (`delivered_at`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -79,6 +130,12 @@ ALTER TABLE `events`
 --
 ALTER TABLE `events`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
